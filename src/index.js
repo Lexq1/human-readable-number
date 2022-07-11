@@ -1,19 +1,18 @@
-const a = ['', 'один ', 'два ', 'три ', 'четыре ', 'пять ', 'шесть ', 'семь ', 'восемь ', 'девять ', 'десять ', 'одинадцать ', 'двенадцать ', 'тринадцать ', 'четырнадцать ', 'пятнадцать ', 'шестнадцать ', 'семнадцать ', 'восемнадцать ', 'девятнадцать '];
-const b = ['', '', 'двадцать ', 'тридцать ', 'сорок ', 'пятьдесят ', 'шестьдесят ', 'семьдесят ', 'восемьдесят ', 'девяносто '];
+const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen ']
+const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
 
-const c = ['', 'сто ', 'двести ', 'триста ', 'четыреста ', 'пятьсот ', 'шестьсот ', 'семьсот ', 'восемьсот ', 'девятьсот '];
+const regex = /^(\d{1})(\d{2})$/;
+const getLT20 = (n) => a[Number(n)];
+const getGT20 = (n) => b[n[0]] + ' ' + a[n[1]];
 
 module.exports = function toReadable (number) {
-  let strN = '' + number;
-    let res = '';
-  	if(strN.length > 2){
-    	res = c[strN[0]] + b[strN[1]] + a[strN[2]];
-    }else if(strN.length == 2){
-    	res = b[strN[0]] + a[strN[1]];
-    }else{
-    	res = a[strN];
-    }
-  	
-    
-  return res.trim();
+	if (number === 0) return 'zero'
+    let numStr = '' + number;
+  
+  const [, n1, n2] = ('000' + numStr).substr(-3).match(regex);
+  let str = '';
+  str += n1 != 0 ? getLT20(n1) + 'hundred ' : '';
+  str += n2 != 0 ? (getLT20(n2) || getGT20(n2)) : '';
+
+  return str.trim();
 }
